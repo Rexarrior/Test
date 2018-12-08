@@ -18,6 +18,7 @@ server.use(
 
 server.use(restify.plugins.bodyParser());
 
+
 server.get('/', function(req,res, next){ 
     console.log('/knowmore.. was called'); 
     res.writeHead(200, {"Content-Type":"text/html"});
@@ -25,33 +26,12 @@ server.get('/', function(req,res, next){
     file.pipe(res);
     return next();
 }); 
-server.get('/main.css', function(req, res, next){ 
-    res.writeHead(200, {"Content-Type":"text/css"});
-    file = fs.createReadStream('main.css');
-    file.pipe(res);
-    return next();
-}); 
-server.get('/mainClient.js', function(req, res, next){ 
-    res.writeHead(200, {"Content-Type":"text/js"});
-    file = fs.createReadStream('main.Client.js');
-    file.pipe(res);
-    return next();
-}); 
-server.get('/index.js', function(req, res, next){ 
-    res.writeHead(200, {"Content-Type":"text/js"});
-    file = fs.createReadStream('index.js');
-    file.pipe(res);
-    return next();
-}); 
-server.get('/test.js', function(req, res, next){ 
-    res.writeHead(200, {"Content-Type":"text/js"});
-    file = fs.createReadStream('test.js');
-    file.pipe(res);
-    return next();
-}); 
 
-server.listen(3306, 
-()=>console.log('Server UP!'));
+
+server.get('/static/*', restify.plugins.serveStatic({
+    directory: __dirname,
+    default: __dirname + '/index.js'
+}));
 
 server.post('/api/user',
     function(req, res, next){
@@ -62,6 +42,35 @@ server.post('/api/user',
         res.end();
         next();
     });
+
+// server.get('/main.css', function(req, res, next){ 
+//     res.writeHead(200, {"Content-Type":"text/css"});
+//     file = fs.createReadStream('main.css');
+//     file.pipe(res);
+//     return next();
+// }); 
+// server.get('/mainClient.js', function(req, res, next){ 
+//     res.writeHead(200, {"Content-Type":"text/js"});
+//     file = fs.createReadStream('main.Client.js');
+//     file.pipe(res);
+//     return next();
+// }); 
+// server.get('/index.js', function(req, res, next){ 
+//     res.writeHead(200, {"Content-Type":"text/js"});
+//     file = fs.createReadStream('index.js');
+//     file.pipe(res);
+//     return next();
+// }); 
+// server.get('/test.js', function(req, res, next){ 
+//     res.writeHead(200, {"Content-Type":"text/js"});
+//     file = fs.createReadStream('test.js');
+//     file.pipe(res);
+//     return next();
+// }); 
+
+
+server.listen(3306, 
+()=>console.log('Server UP!'));
 
 String.prototype.replaceAll = function(search, replacement) {
   var target = this;
